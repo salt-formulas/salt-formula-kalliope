@@ -3,16 +3,29 @@
 
 Debian:
   pkgs:
-  - kalliope
+  - libatlas-base-dev
+  - libportaudio2
+  - libasound-dev
+  - libasound2-dev
+  - portaudio19-dev
+  - libportaudiocpp0
+#  - ffmpeg
+#  - libav-tools
+  - mplayer
+  service: kalliope
+  auth: {}
   dir:
     base: /srv/kalliope
     config: /etc/kalliope
-    resource:
-    - /etc/kalliope/resources/neurons
-    - /etc/kalliope/resources/stt
-    - /etc/kalliope/resources/tts
-    - /etc/kalliope/resources/signal
-    - /etc/kalliope/resources/trigger
+    log: /var/log/kalliope
+    triggers: /srv/kalliope/trigger
+    resources: /srv/kalliope/resource
+  resources:
+  - neuron
+  - stt
+  - tts
+  - signal
+  - trigger
   synapse: {}
 
 {%- endload %}

@@ -23,8 +23,14 @@ kalliope_user:
 kalliope_dirs:
   file.directory:
   - names:
-    - /etc/kalliope
-    - /var/log/kalliope
+    - {{ server.dir.config }}
+    - {{ server.dir.log }}
+    - {{ server.dir.triggers }}
+    - {{ server.dir.resources }}/neuron
+    - {{ server.dir.resources }}/tts
+    - {{ server.dir.resources }}/stt
+    - {{ server.dir.resources }}/signal
+    - {{ server.dir.resources }}/trigger
   - mode: 700
   - makedirs: true
   - user: kalliope
@@ -50,14 +56,55 @@ kalliope_config:
   - require:
     - file: kalliope_config_dir
 
-kalliope_brain:
+kalliope_wake_up:
   file.managed:
-  - name: /etc/kalliope/known_devices.yaml
-  - source: salt://kalliope/files/known_devices.yaml
+  - name: {{ server.dir.triggers }}/kalliope.pmdl
+  - source: salt://kalliope/files/pmdl/kalliope-{{ server.language }}.pmdl
   - template: jinja
   - user: kalliope
   - mode: 600
   - require:
-    - file: kalliope_dir
+    - file: kalliope_config_dir
+
+kalliope_vars:
+  file.managed:
+  - name: {{ server.dir.config }}/variables.yml
+  - source: salt://kalliope/files/variables.yml
+  - template: jinja
+  - user: kalliope
+  - mode: 600
+  - require:
+    - file: kalliope_config_dir
+
+kalliope_brain:
+  file.managed:
+  - name: {{ server.dir.config }}/brain.yml
+  - source: salt://kalliope/files/brain.yml
+  - template: jinja
+  - user: kalliope
+  - mode: 600
+  - require:
+    - file: kalliope_config_dir
+
+{%- if grains.get('init', None) == 'systemd' %}
+
+kalliope_service_file:
+  file.managed:
+  - name: /etc/systemd/system/{{ server.service }}.service
+  - source: salt://kalliope/files/kalliope.service
+  - template: jinja
+  - user: root
+  - mode: 644
+
+kalliope_service:
+  service.running:
+  - name: {{ server.service }}
+  - enable: true
+  - watch:
+    - file: kalliope_service_file
+    - file: kalliope_config
+    - file: kalliope_brain
+
+{%- endif %}
 
 {%- endif %}

@@ -1,0 +1,2 @@
+{%- from "kalliope/map.jinja" import server with context %}
+name: {{ server.name }}
