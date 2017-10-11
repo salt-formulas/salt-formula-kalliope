@@ -7,7 +7,7 @@ WorkingDirectory=/etc/kalliope
 Environment='STDOUT=/var/log/kalliope/kalliope.log'
 Environment='STDERR=/var/log/kalliope/kalliope.err.log'
 ExecStart=/bin/bash -c "/srv/kalliope/bin/kalliope start > ${STDOUT} 2> ${STDERR}"
-User=kalliope
+User=root
 
 [Install]
 WantedBy=multi-user.target

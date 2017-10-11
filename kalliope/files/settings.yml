@@ -1,15 +1,34 @@
 ---
 {%- from "kalliope/map.jinja" import server with context %}
 
+{% macro get_default_engine(dict) -%}
+{%- for key, value in dict.iteritems() %}
+{%- if value.get('default', False) %}
+{{- value.engine }}
+{%- endif %}
+{%- endfor %}
+{%- endmacro %}
+
+{% macro get_list(dict) -%}
+{%- for key, value in dict.iteritems() %}
+{%- if value.default is defined %}
+{%- do value.pop('default') %}
+{%- endif %}
+- {{ value.engine }}:
+{%- do value.pop('engine') %}
+    {{ value|yaml(False)|indent(4) }}
+{%- endfor %}
+{%- endmacro %}
+
 # This is the trigger that will catch your magic work to wake up Kalliope
 default_trigger: "snowboy"
 
 triggers:
-  - snowboy:
-      pmdl_file: "{{ server.dir.triggers }}/kalliope.pmdl"
+- snowboy:
+    pmdl_file: "{{ server.dir.triggers }}/kalliope.pmdl"
 
 # This is the STT that will be used by default
-default_speech_to_text: "google"
+default_speech_to_text: "{{ get_default_engine(server.speech_to_text) }}"
 
 # Speech to text options
 #recognition_options:
@@ -17,11 +36,11 @@ default_speech_to_text: "google"
 #  adjust_for_ambient_noise_second: 1
 
 speech_to_text:
-  - google:
-      language: "en-EN"
+{{ get_list(server.speech_to_text) }}
 
 # This is the default TTS that will be used by Kalliope to talk.
-default_text_to_speech: "pico2wave"
+default_text_to_speech: "{{ get_default_engine(server.text_to_speech) }}"
+
 # where we store generated audio files from TTS engine to reuse them
 cache_path: "/tmp/kalliope_tts_cache"
 
@@ -32,22 +51,24 @@ cache_path: "/tmp/kalliope_tts_cache"
 # - googletts
 # - voicerss
 text_to_speech:
-  - pico2wave:
-      language: "en-US"
-      cache: True
-  - acapela:
-      language: "sonid15"
-      voice: "Manon"
-      cache: True
-  - googletts:
-      language: "en"
-      cache: True
-  - voicerss:
-      language: "en-us"
-      cache: True
+{{- get_list(server.text_to_speech) }}
+
+#  - pico2wave:
+#      language: "en-US"
+#      cache: True
+#  - acapela:
+#      language: "sonid15"
+#      voice: "Manon"
+#      cache: True
+#  - googletts:
+#      language: "en"
+#      cache: True
+#  - voicerss:
+#      language: "en-us"
+#      cache: True
 
 # This is the sound player that will be used by default
-default_player: "mplayer"
+default_player: "{{ get_default_engine(server.player) }}"
 
 # players configuration
 # Available engine are:
@@ -56,14 +77,16 @@ default_player: "mplayer"
 # - pyaudioplayer     # no mp3
 # - sounddeviceplayer # no mp3
 players:
-  - mplayer: {}
-  - pyalsaaudio:
-     device: "default"
-     convert_to_wav: True
-  - pyaudioplayer:
-     convert_to_wav: True
-  - sounddeviceplayer:
-     convert_to_wav: True
+{{- get_list(server.player) }}
+
+#  - mplayer: {}
+#  - pyalsaaudio:
+#     device: "default"
+#     convert_to_wav: True
+#  - pyaudioplayer:
+#     convert_to_wav: True
+#  - sounddeviceplayer:
+#     convert_to_wav: True
 
 # When Kalliope detect the hotword/trigger, he will select randomly a phrase
 # in the following list to notify the user that he's listening for orders
@@ -93,7 +116,7 @@ play_on_ready_notification: "never"
 
 # The on ready notification can be a sentence. Place here a sentence or a list of sentence. If you set a list, one sentence will be picked up randomly
 on_ready_answers:
-  - "waiting for order"
+- "Waiting for order"
 
 # You can play a sound instead of a sentence.
 # Remove the `on_ready_answers` parameters by commenting it out and use this one instead.
@@ -116,7 +139,6 @@ rest_api:
 
 # Specify an optional default synapse response in case your order is not
 # found.
-
 default_synapse: "default-synapse"
 
 resource_directory:
