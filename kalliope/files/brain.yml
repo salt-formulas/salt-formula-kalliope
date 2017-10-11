@@ -1,0 +1,7 @@
+---
+{%- from "kalliope/map.jinja" import server with context %}
+{%- for synapse_name, synapse in server.get('synapse', {}).iteritems() %}
+  - name: "{{ synapse_name }}"
+    signals: {{ synapse.signals }}
+    neurons: {{ synapse.neurons }}
+{%- endfor %}

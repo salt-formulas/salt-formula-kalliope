@@ -1,0 +1,15 @@
+Source: salt-formula-kalliope
+Maintainer: Ales Komarek ales.komarek@newt.cz
+Section: admin
+Priority: optional
+Build-Depends: debhelper (>= 9), salt-master, python, python-yaml
+Standards-Version: 3.9.6
+Homepage: https://github.com/salt-formulas
+Vcs-Browser: https://github.com/salt-formulas/salt-formula-kalliope
+Vcs-Git: https://github.com/salt-formulas/salt-formula-kalliope.git
+
+Package: salt-formula-kalliope
+Architecture: all
+Depends: ${misc:Depends}, salt-master, reclass
+Description: kalliope salt formula
+ Install and configure kalliope system.
