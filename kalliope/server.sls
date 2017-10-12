@@ -86,6 +86,15 @@ kalliope_brain:
   - require:
     - file: kalliope_config_dir
 
+{%- for resource_name, resource in server.resource.iteritems() %}
+
+kalliope_install_resource_{{ resource_name }}:
+  cmd.run:
+  - name: kalliope install --git-url "{{ resource.source.address }}"
+  - onlyif: [ -f "{{ server.dir.resources }}/{{ resource.resource }}/{{ resource_name }}" ]
+
+{%- endfor %}
+
 {%- if grains.get('init', None) == 'systemd' %}
 
 kalliope_service_file:
