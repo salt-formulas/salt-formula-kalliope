@@ -19,10 +19,13 @@ kalliope_user:
   - home: {{ server.dir.base }}
   - require:
     - virtualenv: {{ server.dir.base }}
+  - groups:
+    - audio
 
 kalliope_dirs:
   file.directory:
   - names:
+    - {{ server.dir.base }}
     - {{ server.dir.config }}
     - {{ server.dir.log }}
     - {{ server.dir.triggers }}

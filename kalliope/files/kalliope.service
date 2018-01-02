@@ -4,7 +4,7 @@ Description=Kalliope
 [Service]
 WorkingDirectory=/etc/kalliope
 ExecStart=/srv/kalliope/bin/kalliope start
-User=root
+User=kalliope
 
 [Install]
 WantedBy=multi-user.target
