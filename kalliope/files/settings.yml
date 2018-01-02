@@ -110,6 +110,8 @@ rest_api:
   password: {{ server.auth.password }}
   {%- else %}
   password_protected: False
+  login: admin
+  password: admin
   {%- endif %}
   allowed_cors_origin: "*"
 
