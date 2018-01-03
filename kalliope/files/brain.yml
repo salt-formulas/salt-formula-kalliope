@@ -1,7 +1,29 @@
 ---
+{#-
+Follows hacky way to support UTF-8 in jinja.. like really? In 2018?
+-#}
 {%- from "kalliope/map.jinja" import server with context %}
 {%- for synapse_name, synapse in server.get('synapse', {}).iteritems() %}
   - name: "{{ synapse_name }}"
-    signals: {{ synapse.signals }}
-    neurons: {{ synapse.neurons }}
+    signals:
+      {%- for item in synapse.signals %}
+      -
+        {%- for k, v in item.iteritems() %}
+        {{ k }}: {% if v is string %}{{ v.decode('utf-8') }}{% else %}{{ v }}{% endif %}
+        {%- endfor %}
+      {%- endfor %}
+    neurons:
+      {%- for item in synapse.neurons %}
+      -
+        {%- for name, neuron in item.iteritems() %}
+        {{ name }}:
+          {%- for k, v in neuron.iteritems() %}
+          {{ k }}: {% if v is string %}'{{ v.decode('utf-8') }}'{% else %}
+            {%- for i in v %}
+            - {{ i.decode('utf-8') }}
+            {%- endfor %}
+            {% endif %}
+          {%- endfor %}
+        {%- endfor %}
+      {%- endfor %}
 {%- endfor %}

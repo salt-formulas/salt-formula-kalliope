@@ -1,5 +1,5 @@
 ---
-{%- from "kalliope/map.jinja" import server with context %}
+{%- from "kalliope/map.jinja" import server with context -%}
 
 {% macro get_default_engine(dict) -%}
 {%- for key, value in dict.iteritems() %}
@@ -70,10 +70,16 @@ players:
 # When Kalliope detect the hotword/trigger, he will select randomly a phrase
 # in the following list to notify the user that he's listening for orders
 random_wake_up_answers:
+{%- if server.random_wake_up_answers is defined %}
+{%- for sentence in server.random_wake_up_answers %}
+- "{{ sentence.decode('utf-8') }}"
+{%- endfor %}
+{%- else %}
 - "yes, sir?"
 - "I'm listening"
 - "sir?"
 - "how can I help you?"
+{%- endif %}
 
 # The file must be .wav or .mp3 format.
 #random_wake_up_sounds:
@@ -87,12 +93,18 @@ random_wake_up_answers:
 # - always: every time Kalliope is ready to be awaken
 # - never: never play a sound or sentences when kalliope is ready
 # - once: at the first start of Kalliope
-play_on_ready_notification: "once"
+play_on_ready_notification: "{{ server.play_on_ready_notification|default('once') }}"
 
 # The on ready notification can be a sentence. Place here a sentence or a list of sentence. If you set a list, one sentence will be picked up randomly
 on_ready_answers:
+{%- if server.on_ready_answers is defined %}
+{%- for sentence in server.on_ready_answers %}
+- "{{ sentence.decode('utf-8') }}"
+{%- endfor %}
+{%- else %}
 - "awaiting your orders"
 - "at your command"
+{%- endif %}
 
 # You can play a sound instead of a sentence.
 # Remove the `on_ready_answers` parameters by commenting it out and use this one instead.
