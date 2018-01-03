@@ -61,6 +61,51 @@ Single kalliope service with extra resources defined
               engine: git
               address: https://github.com/kalliope-project/kalliope_neuron_hue.git
 
+Kalliope server with Czech localization and synapse that tells local time
+
+.. code-block:: yaml
+
+    kalliope:
+      server:
+        enabled: true
+        name: kalliope
+        player:
+          mplayer:
+            default: true
+            engine: mplayer
+        bind:
+          address: 0.0.0.0
+          port: 5000
+        random_wake_up_answers:
+          - "čekám na vaše rozkazy"
+          - "ano pane?"
+          - "poslouchám"
+          - "co pro vás mohu udělat?"
+        on_ready_answers:
+          - "čekám na vaše rozkazy"
+        play_on_ready_notification: "never"
+        language: cs
+        speech_to_text:
+          google:
+            default: true
+            engine: google
+            language: "cs-CZ"
+        text_to_speech:
+          googletts:
+            default: true
+            engine: googletts
+            language: "cs"
+            cache: true
+        synapse:
+          say-local-time:
+            signals:
+              - order: "Kolik je hodin"
+              - order: "Jaký je čas"
+            neurons:
+              - systemdate:
+                  say_template:
+                    - "Je {{ hours }} hodin a {{ minutes }} minut"
+
 More Information
 ================
 
