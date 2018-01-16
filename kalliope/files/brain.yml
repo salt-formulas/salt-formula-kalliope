@@ -9,7 +9,11 @@ Follows hacky way to support UTF-8 in jinja.. like really? In 2018?
       {%- for item in synapse.signals %}
       -
         {%- for k, v in item.iteritems() %}
-        {{ k }}: {% if v is string %}{{ v.decode('utf-8') }}{% else %}{{ v }}{% endif %}
+        {{ k }}: {% if v is string %}{{ v.decode('utf-8') }}{% else %}
+          {%- for kn, vn in v.iteritems() %}
+          {{ kn }}: {{ vn.decode('utf-8') }}
+          {%- endfor %}
+        {% endif %}
         {%- endfor %}
       {%- endfor %}
     neurons:
