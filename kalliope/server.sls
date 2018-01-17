@@ -94,8 +94,8 @@ kalliope_brain:
 
 kalliope_install_resource_{{ resource_name }}:
   cmd.run:
-  - name: kalliope install --git-url "{{ resource.source.address }}"
-  - onlyif: [ -f "{{ server.dir.resources }}/{{ resource.resource }}/{{ resource_name }}" ]
+  - name: {{ server.dir.base }}/bin/kalliope install --git-url "{{ resource.source.address }}"
+  - creates: {{ server.dir.resources }}/{{ resource_name }}
 
 {%- endfor %}
 
