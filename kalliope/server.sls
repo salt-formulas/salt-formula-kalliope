@@ -90,6 +90,26 @@ kalliope_brain:
   - require:
     - file: kalliope_config_dir
 
+{%- for synapse_name, synapse in server.get('synapse', {}).iteritems() %}
+  {%- for item in synapse.neurons %}
+    {%- set neuron_index = loop.index0 %}
+    {%- for neuron_name, neuron in item.iteritems() %}
+      {%- if neuron.get('template') %}
+        {%- set neuron_file_template = neuron.get('file_template', server.dir.config+"/templates/"+synapse_name+"_"+neuron_name+".j2") %}
+
+kalliope_template_{{ synapse_name }}_{{ neuron_name }}:
+  file.managed:
+    - name: {{ neuron_file_template }}
+    - contents_pillar: kalliope:server:synapse:{{ synapse_name }}:neurons:{{ neuron_index }}:{{ neuron_name }}:template
+    - makedirs: true
+    - require:
+      - file: kalliope_config_dir
+
+      {%- endif %}
+    {%- endfor %}
+  {%- endfor %}
+{%- endfor %}
+
 {%- for resource_name, resource in server.resource.iteritems() %}
 
 kalliope_install_resource_{{ resource_name }}:
