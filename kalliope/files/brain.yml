@@ -22,7 +22,7 @@ Follows hacky way to support UTF-8 in jinja.. like really? In 2018?
         {%- for name, neuron in item.iteritems() %}
         {{ name }}:
           {%- for k, v in neuron.iteritems() if k != "template" %}
-          {{ k }}: {% if v is string %}'{{ v.decode('utf-8') }}'{% else %}
+          {{ k }}: {% if v is string %}'{{ v.decode('utf-8') }}'{% elif v in [True, False] %}{{ v }}{% else %}
             {%- for i in v %}
             - {{ i.decode('utf-8') }}
             {%- endfor %}
