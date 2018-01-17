@@ -3,7 +3,7 @@ Description=Kalliope
 
 [Service]
 WorkingDirectory=/etc/kalliope
-ExecStart=/srv/kalliope/bin/kalliope start
+ExecStart=/srv/kalliope/bin/kalliope start --debug
 User=kalliope
 
 [Install]
