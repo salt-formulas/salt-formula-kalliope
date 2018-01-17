@@ -8,6 +8,7 @@ kalliope_packages:
 {{ server.dir.base }}:
   virtualenv.manage:
   - system_site_packages: True
+  - python: {{ server.python }}
   - requirements: salt://kalliope/files/requirements.txt
   - require:
     - pkg: kalliope_packages

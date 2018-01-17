@@ -11,13 +11,30 @@ Debian:
   - libportaudiocpp0
   - sox
   - libsox-fmt-all
-#  - ffmpeg
-#  - libav-tools
   - mplayer
-#  - mbrola
-#  - mbrola-cz2
+  # Python requirements to reduce virtualenv size
+  - python3-dev
+  - python3-openssl
+  - python3-pyaudio
+  - python3-six
+  - python3-pyasn1
+  - python3-jinja2
+  - python3-cffi
+  - python3-flask
+  - python3-flask-restful
+  - python3-flask-testing
+  - python3-requests
+  - python3-httpretty
+  - python3-apscheduler
+  - python3-git
+  - python3-mock
+  - python3-packaging
+  - python3-transitions
+  - python3-soundfile
+  - python3
   service: kalliope
   auth: {}
+  python: /usr/bin/python3
   dir:
     base: /srv/kalliope
     config: /etc/kalliope
