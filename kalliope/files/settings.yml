@@ -141,6 +141,13 @@ resource_directory:
 var_files:
 - {{ server.dir.config }}/variables.yml
 
+{%- if server.hook is defined %}
+hooks:
+  {%- for k, v in server.hook.items() %}
+  {{ k }}: "{{ v }}"
+  {%- endfor %}
+{%- endif %}
+
 #rpi:
 #  pin_mute_button: 24
 #  pin_led_started: 23
