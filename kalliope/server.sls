@@ -80,6 +80,26 @@ kalliope_vars:
   - require:
     - file: kalliope_config_dir
 
+kalliope_ding:
+  file.managed:
+  - name: {{ server.dir.base }}/bin/ding.sh
+  - source: salt://kalliope/files/ding.sh
+  - template: jinja
+  - user: kalliope
+  - mode: 755
+  - require:
+    - file: kalliope_config_dir
+
+kalliope_dong:
+  file.managed:
+  - name: {{ server.dir.base }}/bin/dong.sh
+  - source: salt://kalliope/files/dong.sh
+  - template: jinja
+  - user: kalliope
+  - mode: 755
+  - require:
+    - file: kalliope_config_dir
+
 kalliope_brain:
   file.managed:
   - name: {{ server.dir.config }}/brain.yml

@@ -21,11 +21,14 @@
 {%- endmacro %}
 
 # This is the trigger that will catch your magic work to wake up Kalliope
-default_trigger: "snowboy"
+default_trigger: "{{ server.trigger.engine }}"
 
 triggers:
-- snowboy:
-    pmdl_file: "{{ server.dir.triggers }}/kalliope.pmdl"
+{%- if server.trigger.engine == "snowboy" %}
+  - snowboy:
+      sensitivity: "{{ server.trigger.sensitivity }}"
+      pmdl_file: "{{ server.dir.triggers }}/kalliope.pmdl"
+{%- endif %}
 
 # This is the STT that will be used by default
 default_speech_to_text: "{{ get_default_engine(server.speech_to_text) }}"
@@ -82,9 +85,12 @@ random_wake_up_answers:
 {%- endif %}
 
 # The file must be .wav or .mp3 format.
-#random_wake_up_sounds:
-# - "trigger/dong.wav"
-# - "/my/personal/full/path/my_file.mp3"
+random_wake_up_sounds:
+{%- if server.random_wake_up_sounds is defined %}
+{%- for sound in server.random_wake_up_sounds %}
+- "{{ sound }}"
+{%- endfor %}
+{%- endif %}
 
 # This section is used to notify the user when Kalliope is waiting for a
 # trigger detection by playing a sound or speak a sentence out loud
