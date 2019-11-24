@@ -34,9 +34,9 @@ triggers:
 default_speech_to_text: "{{ get_default_engine(server.speech_to_text) }}"
 
 # Speech to text options
-#recognition_options:
-#  energy_threshold: 4000
-#  adjust_for_ambient_noise_second: 1
+options:
+  energy_threshold: {{ server.options.energy_threshold }}
+  adjust_for_ambient_noise_second: {{ server.options.adjust_for_ambient_noise_second }}
 
 speech_to_text:
 {{ get_list(server.speech_to_text) }}
